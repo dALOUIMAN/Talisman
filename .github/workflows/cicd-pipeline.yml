@@ -1,0 +1,48 @@
+name: CI/CD Pipeline
+
+# Bepaalt wanneer de workflow wordt uitgevoerd
+on:
+  push:
+    branches: [ main ] # Voert uit bij een push naar de main branch
+  pull_request:
+    branches: [ main ] # Voert ook uit bij pull requests naar main
+
+# Definieert de taken die uitgevoerd worden
+jobs:
+  build-and-test:
+    # Specificeert het type machine om de taak op uit te voeren
+    runs-on: ubuntu-latest
+
+    steps:
+      # Stap 1: Klonen van de repository
+      # Haalt de code van je project op zodat de workflow er toegang toe heeft.
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # Stap 2: Node.js omgeving opzetten
+      # Installeert Node.js, wat nodig is voor de meeste moderne webprojecten.
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20' # Specificeer de gewenste Node.js versie
+          cache: 'npm' # Maakt caching mogelijk om installaties te versnellen
+
+      # Stap 3: Dependencies installeren
+      # Installeert alle projectafhankelijkheden die in package.json staan.
+      - name: Install Dependencies
+        run: npm install
+
+      # Stap 4: Code Linter uitvoeren (optioneel)
+      # Controleert de code op stijlfouten. Vervang door je eigen lint-commando.
+      - name: Run Linter
+        run: npm run lint --if-present
+
+      # Stap 5: Tests uitvoeren (optioneel)
+      # Voert de unit- of integratietests van het project uit.
+      - name: Run Tests
+        run: npm test --if-present
+
+      # Stap 6: Build van het project maken (optioneel)
+      # Compileert de code voor productie.
+      - name: Build Project
+        run: npm run build --if-present
