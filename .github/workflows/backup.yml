@@ -1,0 +1,37 @@
+name: Nightly Backup
+
+on:
+  schedule:
+    - cron: "23 2 * * *" # dagelijks 02:23 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  backup:
+    if: ${{ secrets.CLOUD_BACKUP_PROVIDER != '' && secrets.CLOUD_BACKUP_BUCKET != '' }}
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup AWS CLI (optional)
+        if: ${{ secrets.CLOUD_BACKUP_PROVIDER == 'aws' }}
+        uses: aws-actions/setup-sam@v2
+        continue-on-error: true
+      - name: Setup Azure CLI (optional)
+        if: ${{ secrets.CLOUD_BACKUP_PROVIDER == 'azure' }}
+        uses: Azure/setup-azcli@v4
+        continue-on-error: true
+      - name: Setup gcloud (optional)
+        if: ${{ secrets.CLOUD_BACKUP_PROVIDER == 'gcp' }}
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          install_components: 'gsutil'
+        continue-on-error: true
+      - name: Run backup script
+        shell: pwsh
+        env:
+          CLOUD_BACKUP_PROVIDER: ${{ secrets.CLOUD_BACKUP_PROVIDER }}
+          CLOUD_BACKUP_BUCKET: ${{ secrets.CLOUD_BACKUP_BUCKET }}
+        run: |
+          ./scripts/backup.ps1 -DryRun:$false
