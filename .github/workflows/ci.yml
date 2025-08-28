@@ -1,0 +1,29 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - feature/wonderwoman-asus2
+      - main
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  lint-and-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node (if needed)
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Super-Linter (optional)
+        uses: super-linter/super-linter@v6
+        env:
+          DEFAULT_BRANCH: main
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        continue-on-error: true
+      - name: Placeholder Build
+        run: echo "Build placeholder (add real build later)"
