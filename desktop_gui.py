@@ -8,6 +8,7 @@ import tkinter as tk
 from tkinter import ttk
 import os
 import sys
+import subprocess
 from pathlib import Path
 
 class ModernDesktopGUI:
@@ -301,47 +302,70 @@ class ModernDesktopGUI:
     def launch_terminal(self):
         """Launch terminal application"""
         print("Launching Terminal...")
-        os.system('xterm &' if os.path.exists('/usr/bin/xterm') else 'echo "Terminal not found"')
+        if os.path.exists('/usr/bin/xterm'):
+            subprocess.Popen(['xterm'])
+        else:
+            print("Terminal not found")
         
     def launch_browser(self):
         """Launch web browser"""
         print("Launching Browser...")
-        os.system('firefox &' if os.path.exists('/usr/bin/firefox') else 
-                 'chromium &' if os.path.exists('/usr/bin/chromium') else
-                 'google-chrome &' if os.path.exists('/usr/bin/google-chrome') else
-                 'echo "No browser found"')
+        if os.path.exists('/usr/bin/firefox'):
+            subprocess.Popen(['firefox'])
+        elif os.path.exists('/usr/bin/chromium'):
+            subprocess.Popen(['chromium'])
+        elif os.path.exists('/usr/bin/google-chrome'):
+            subprocess.Popen(['google-chrome'])
+        else:
+            print("No browser found")
         
     def launch_files(self):
         """Launch file manager"""
         print("Launching File Manager...")
-        os.system('nautilus &' if os.path.exists('/usr/bin/nautilus') else
-                 'dolphin &' if os.path.exists('/usr/bin/dolphin') else
-                 'thunar &' if os.path.exists('/usr/bin/thunar') else
-                 'pcmanfm &' if os.path.exists('/usr/bin/pcmanfm') else
-                 'echo "No file manager found"')
+        if os.path.exists('/usr/bin/nautilus'):
+            subprocess.Popen(['nautilus'])
+        elif os.path.exists('/usr/bin/dolphin'):
+            subprocess.Popen(['dolphin'])
+        elif os.path.exists('/usr/bin/thunar'):
+            subprocess.Popen(['thunar'])
+        elif os.path.exists('/usr/bin/pcmanfm'):
+            subprocess.Popen(['pcmanfm'])
+        else:
+            print("No file manager found")
         
     def launch_settings(self):
         """Launch system settings"""
         print("Launching Settings...")
-        os.system('gnome-control-center &' if os.path.exists('/usr/bin/gnome-control-center') else
-                 'systemsettings5 &' if os.path.exists('/usr/bin/systemsettings5') else
-                 'echo "No settings app found"')
+        if os.path.exists('/usr/bin/gnome-control-center'):
+            subprocess.Popen(['gnome-control-center'])
+        elif os.path.exists('/usr/bin/systemsettings5'):
+            subprocess.Popen(['systemsettings5'])
+        else:
+            print("No settings app found")
         
     def launch_editor(self):
         """Launch text editor"""
         print("Launching Editor...")
-        os.system('gedit &' if os.path.exists('/usr/bin/gedit') else
-                 'kate &' if os.path.exists('/usr/bin/kate') else
-                 'vim &' if os.path.exists('/usr/bin/vim') else
-                 'nano &' if os.path.exists('/usr/bin/nano') else
-                 'echo "No editor found"')
+        if os.path.exists('/usr/bin/gedit'):
+            subprocess.Popen(['gedit'])
+        elif os.path.exists('/usr/bin/kate'):
+            subprocess.Popen(['kate'])
+        elif os.path.exists('/usr/bin/vim'):
+            subprocess.Popen(['vim'])
+        elif os.path.exists('/usr/bin/nano'):
+            subprocess.Popen(['nano'])
+        else:
+            print("No editor found")
         
     def launch_media(self):
         """Launch media player"""
         print("Launching Media Player...")
-        os.system('vlc &' if os.path.exists('/usr/bin/vlc') else
-                 'mpv &' if os.path.exists('/usr/bin/mpv') else
-                 'echo "No media player found"')
+        if os.path.exists('/usr/bin/vlc'):
+            subprocess.Popen(['vlc'])
+        elif os.path.exists('/usr/bin/mpv'):
+            subprocess.Popen(['mpv'])
+        else:
+            print("No media player found")
 
 def main():
     """Main entry point"""
