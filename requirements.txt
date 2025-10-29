@@ -1,0 +1,14 @@
+# Python requirements for Talisman Desktop GUI
+# Note: Tkinter is included with Python standard library on most systems
+# If Tkinter is not available, install it using your system package manager:
+# 
+# Arch Linux:
+#   sudo pacman -S tk
+#
+# Ubuntu/Debian:
+#   sudo apt-get install python3-tk
+#
+# Fedora:
+#   sudo dnf install python3-tkinter
+
+# No additional Python packages required - uses standard library only
