@@ -1,0 +1,111 @@
+version: '3.8'
+
+services:
+  # Primary Agent Zero instance - AI coordinator
+  agent-zero-coordinator:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: agentzero-coordinator
+    hostname: coordinator
+    environment:
+      - AGENT_ROLE=coordinator
+      - AGENT_ID=coordinator-001
+      - HIVE_MODE=enabled
+      - LOG_LEVEL=INFO
+    volumes:
+      - ./agentzero:/workspace/agentzero
+      - ./noxcore:/workspace/noxcore
+      - ./data:/workspace/data
+      - ./logs:/workspace/logs
+    networks:
+      - agentzero-hive
+    ports:
+      - "8000:8000"  # API endpoint
+      - "8001:8001"  # WebSocket for real-time communication
+    restart: unless-stopped
+    stdin_open: true
+    tty: true
+
+  # Agent Zero worker instances - distributed processing
+  agent-zero-worker-1:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: agentzero-worker-1
+    hostname: worker-1
+    environment:
+      - AGENT_ROLE=worker
+      - AGENT_ID=worker-001
+      - COORDINATOR_HOST=coordinator
+      - COORDINATOR_PORT=8000
+      - HIVE_MODE=enabled
+    volumes:
+      - ./agentzero:/workspace/agentzero
+      - ./noxcore:/workspace/noxcore
+      - ./data:/workspace/data
+      - ./logs:/workspace/logs
+    networks:
+      - agentzero-hive
+    depends_on:
+      - agent-zero-coordinator
+    restart: unless-stopped
+
+  agent-zero-worker-2:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: agentzero-worker-2
+    hostname: worker-2
+    environment:
+      - AGENT_ROLE=worker
+      - AGENT_ID=worker-002
+      - COORDINATOR_HOST=coordinator
+      - COORDINATOR_PORT=8000
+      - HIVE_MODE=enabled
+    volumes:
+      - ./agentzero:/workspace/agentzero
+      - ./noxcore:/workspace/noxcore
+      - ./data:/workspace/data
+      - ./logs:/workspace/logs
+    networks:
+      - agentzero-hive
+    depends_on:
+      - agent-zero-coordinator
+    restart: unless-stopped
+
+  # NoxCore lab toolbox console
+  noxcore-console:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: noxcore-console
+    hostname: noxcore-console
+    environment:
+      - SERVICE_TYPE=console
+      - AGENT_ACCESS=enabled
+    volumes:
+      - ./agentzero:/workspace/agentzero
+      - ./noxcore:/workspace/noxcore
+      - ./data:/workspace/data
+      - ./logs:/workspace/logs
+    networks:
+      - agentzero-hive
+    ports:
+      - "3000:3000"  # Console UI
+    depends_on:
+      - agent-zero-coordinator
+    restart: unless-stopped
+    stdin_open: true
+    tty: true
+
+networks:
+  agentzero-hive:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.28.0.0/16
+
+volumes:
+  agentzero-data:
+  noxcore-data:
