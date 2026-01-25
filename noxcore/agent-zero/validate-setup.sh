@@ -119,11 +119,16 @@ echo "Validating configuration files..."
 echo ""
 
 # Check YAML syntax
+yaml_file='config/agent-config.yml'
 if command -v python3 &> /dev/null; then
-    if python3 -c "import yaml; yaml.safe_load(open('config/agent-config.yml'))" 2>/dev/null; then
-        check_pass "Valid YAML: config/agent-config.yml"
+    if [ -f "$yaml_file" ]; then
+        if python3 -c "import yaml; yaml.safe_load(open('$yaml_file'))" 2>/dev/null; then
+            check_pass "Valid YAML: $yaml_file"
+        else
+            check_fail "Invalid YAML: $yaml_file"
+        fi
     else
-        check_fail "Invalid YAML: config/agent-config.yml"
+        check_fail "Missing: $yaml_file"
     fi
 fi
 

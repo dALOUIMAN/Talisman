@@ -52,6 +52,9 @@ class BaseAgent:
         if not self.redis_client:
             return
         
+        # Get TTL from environment, default to 5 minutes
+        ttl = int(os.getenv('AGENT_TTL', 300))
+        
         agent_info = {
             'id': self.agent_id,
             'type': self.agent_type,
@@ -61,7 +64,7 @@ class BaseAgent:
         
         await self.redis_client.setex(
             f"agent:{self.agent_id}",
-            300,  # 5 minutes TTL
+            ttl,
             json.dumps(agent_info)
         )
         

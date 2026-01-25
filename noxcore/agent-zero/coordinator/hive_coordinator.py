@@ -59,9 +59,9 @@ class HiveCoordinator:
             return
         
         try:
-            # Scan for agent keys
+            # Scan for agent keys with larger batch size for better performance
             keys = []
-            async for key in self.redis_client.scan_iter(match="agent:*", count=100):
+            async for key in self.redis_client.scan_iter(match="agent:*", count=500):
                 if not key.endswith(':tasks'):
                     keys.append(key)
             

@@ -10,7 +10,9 @@ services:
       - redis-data:/data
     networks:
       - agent-hive
-    command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru
+    environment:
+      - REDIS_MAXMEMORY=${REDIS_MAXMEMORY:-256mb}
+    command: redis-server --appendonly yes --maxmemory ${REDIS_MAXMEMORY:-256mb} --maxmemory-policy allkeys-lru
 
   # Coordinator Agent - Central coordination hub
   coordinator:
