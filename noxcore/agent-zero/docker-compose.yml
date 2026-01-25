@@ -1,0 +1,106 @@
+services:
+  # Redis for agent communication and coordination
+  redis:
+    image: redis:7-alpine
+    container_name: noxcore-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - agent-hive
+    environment:
+      - REDIS_MAXMEMORY=${REDIS_MAXMEMORY:-256mb}
+    command: redis-server --appendonly yes --maxmemory ${REDIS_MAXMEMORY:-256mb} --maxmemory-policy allkeys-lru
+
+  # Coordinator Agent - Central coordination hub
+  coordinator:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: noxcore-coordinator
+    restart: unless-stopped
+    environment:
+      - AGENT_TYPE=coordinator
+      - AGENT_ID=coordinator-1
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - COORDINATOR_ENABLED=true
+      - MAX_AGENTS=10
+    depends_on:
+      - redis
+    networks:
+      - agent-hive
+    volumes:
+      - ./data/coordinator:/agent-zero/data
+
+  # Worker Agent 1 - Task execution
+  agent-worker-1:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: noxcore-agent-1
+    restart: unless-stopped
+    environment:
+      - AGENT_TYPE=worker
+      - AGENT_ID=worker-1
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - COORDINATOR_HOST=coordinator
+    depends_on:
+      - redis
+      - coordinator
+    networks:
+      - agent-hive
+    volumes:
+      - ./data/agent-1:/agent-zero/data
+
+  # Worker Agent 2 - Task execution
+  agent-worker-2:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: noxcore-agent-2
+    restart: unless-stopped
+    environment:
+      - AGENT_TYPE=worker
+      - AGENT_ID=worker-2
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - COORDINATOR_HOST=coordinator
+    depends_on:
+      - redis
+      - coordinator
+    networks:
+      - agent-hive
+    volumes:
+      - ./data/agent-2:/agent-zero/data
+
+  # Worker Agent 3 - Task execution
+  agent-worker-3:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: noxcore-agent-3
+    restart: unless-stopped
+    environment:
+      - AGENT_TYPE=worker
+      - AGENT_ID=worker-3
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - COORDINATOR_HOST=coordinator
+    depends_on:
+      - redis
+      - coordinator
+    networks:
+      - agent-hive
+    volumes:
+      - ./data/agent-3:/agent-zero/data
+
+networks:
+  agent-hive:
+    driver: bridge
+
+volumes:
+  redis-data:

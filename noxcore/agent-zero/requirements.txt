@@ -1,0 +1,14 @@
+# Agent Zero AI Environment - Python Dependencies
+# Lightweight packages for AI agent operations
+
+# Core dependencies
+aiohttp==3.13.3  # Security fix: zip bomb, DoS, and directory traversal vulnerabilities
+websockets==12.0
+
+# Communication & coordination
+redis==5.0.1
+pydantic==2.5.3
+
+# Utilities
+python-dotenv==1.0.0
+pyyaml==6.0.1
