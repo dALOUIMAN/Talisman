@@ -6,16 +6,6 @@ FROM python:3.11-alpine
 LABEL maintainer="NoxCore Team"
 LABEL description="Agent Zero AI Environment - Ultra-lightweight distributed AI agent system"
 
-# Install system dependencies - minimal footprint
-RUN apk add --no-cache \
-    bash \
-    git \
-    curl \
-    build-base \
-    libffi-dev \
-    openssl-dev \
-    && rm -rf /var/cache/apk/*
-
 # Set working directory
 WORKDIR /agent-zero
 
