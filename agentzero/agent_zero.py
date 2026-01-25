@@ -81,13 +81,29 @@ class AgentZero:
             await asyncio.sleep(1)
             
     async def _process_coordinator_tasks(self):
-        """Process tasks in coordinator mode"""
-        # Implement task distribution logic
+        """
+        Process tasks in coordinator mode
+        
+        Note: This is a framework method to be implemented with specific
+        task distribution logic. The coordinator should:
+        - Monitor available workers
+        - Distribute tasks based on priority and load
+        - Track task completion
+        """
+        # TODO: Implement task distribution logic
         pass
         
     async def _process_worker_tasks(self):
-        """Process tasks in worker mode"""
-        # Implement task processing logic
+        """
+        Process tasks in worker mode
+        
+        Note: This is a framework method to be implemented with specific
+        task processing logic. Workers should:
+        - Request tasks from coordinator
+        - Execute assigned tasks
+        - Report completion status
+        """
+        # TODO: Implement task processing logic
         pass
         
     def add_task(self, task: AgentTask):

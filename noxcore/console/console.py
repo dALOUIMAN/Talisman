@@ -42,9 +42,14 @@ class NoxCoreConsole:
             await asyncio.sleep(0.1)
             
     async def _init_visual_interface(self):
-        """Initialize the visual goochelshow (magic show) interface"""
+        """
+        Initialize the visual goochelshow (magic show) interface
+        
+        Note: This is a placeholder for future visual interface implementation.
+        The interface should be fascinating but not compromise agent efficiency.
+        """
         logger.info("Initializing visual interface - Efficiency focused")
-        # Visual elements that don't compromise agent efficiency
+        # TODO: Implement visual elements that don't compromise agent efficiency
         
     async def _init_chat_channel(self):
         """Initialize chat channel for emergencies and ideas"""

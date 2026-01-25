@@ -96,11 +96,12 @@ class ResourceManager:
         
     def allocate_local_resources(self, agent_id: str, requirements: Dict[str, Any]):
         """Allocate local resources to an agent"""
+        from datetime import datetime
         self.local_resources[agent_id] = {
             'cpu': requirements.get('cpu', 1),
             'memory': requirements.get('memory', '512M'),
             'gpu': requirements.get('gpu', False),
-            'allocated_at': 'now'
+            'allocated_at': datetime.now().isoformat()
         }
         logger.info(f"Resources allocated to {agent_id}: {requirements}")
         

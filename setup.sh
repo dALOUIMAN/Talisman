@@ -47,9 +47,14 @@ echo ""
 # Setup environment file
 if [ ! -f .env ]; then
     echo -e "${YELLOW}Creating .env file...${NC}"
-    cp agentzero/config/agent.env .env
-    echo -e "${GREEN}✓ .env file created${NC}"
-    echo -e "${YELLOW}Please edit .env and add your API keys${NC}"
+    if [ -f agentzero/config/agent.env ]; then
+        cp agentzero/config/agent.env .env
+        echo -e "${GREEN}✓ .env file created${NC}"
+        echo -e "${YELLOW}Please edit .env and add your API keys${NC}"
+    else
+        echo -e "${RED}Warning: Template file agentzero/config/agent.env not found${NC}"
+        echo -e "${YELLOW}Please create .env manually${NC}"
+    fi
 else
     echo -e "${GREEN}✓ .env file already exists${NC}"
 fi

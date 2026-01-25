@@ -5,7 +5,7 @@ Implements the "hive mind" concept for linking tasks across agents
 
 import asyncio
 import logging
-from typing import Dict, List, Set
+from typing import Dict, List, Set, Optional
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum

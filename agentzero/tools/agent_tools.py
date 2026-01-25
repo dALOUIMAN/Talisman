@@ -57,11 +57,12 @@ class CommunicationTool:
         
     def send_message(self, sender: str, receiver: str, message: str) -> bool:
         """Send a message between agents"""
+        from datetime import datetime
         msg = {
             'from': sender,
             'to': receiver,
             'message': message,
-            'timestamp': 'now'
+            'timestamp': datetime.now().isoformat()
         }
         self.message_queue.append(msg)
         logger.info(f"Message sent from {sender} to {receiver}")
